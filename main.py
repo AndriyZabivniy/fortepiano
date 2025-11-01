@@ -3,10 +3,13 @@ from settings import *
 from sounds import load_sounds
 from keys import draw_keys, create_key_rects
 from ui.slider import Slider  # ⬅️
+from ui.button import Button
 
 init()
 screen = display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 display.set_caption("Piano Game")
+dark_button = Button(screen.get_width() - 400, 20, 150, 40, "DARK_THEME")
+light_button = Button(screen.get_width() - 230, 20, 150, 40, "LIGHT_THEME")
 
 sounds = load_sounds(KEYS)
 key_rects = create_key_rects(len(KEYS))
@@ -29,6 +32,8 @@ while running:
     # Малюємо слайдер і отримуємо значення гучності ⬅️
     volume_value = volume_slider.draw(screen)
     volume = volume_value / 100  # переводимо в діапазон 0.0 - 1.0
+    dark_button.draw(screen)
+    light_button.draw(screen)
 
     # Встановлюємо гучність для всіх звуків ⬅️
     for sound in sounds.values():
@@ -71,3 +76,9 @@ while running:
             for i, rect in enumerate(key_rects):
                 if i in pressed_keys and rect.collidepoint(pos):
                     pressed_keys.remove(i)
+            if dark_button.is_clicked(e):
+                WHITE = (10, 10, 10)
+                volume_slider.text_color = (255, 255, 255)
+            if light_button.is_clicked(e):
+                WHITE = (200, 200, 200)
+                volume_slider.text_color = (0, 0, 0)
